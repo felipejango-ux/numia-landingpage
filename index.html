@@ -1722,6 +1722,7 @@ window.addEventListener('load', function(){
   <span>Conversion Tracker:</span>
   <span>Views: <strong id="mV">1</strong></span>
   <span>CTA Clicks: <strong id="mC">0</strong></span>
+  <span>Agent Tries: <strong id="mA">0</strong></span>
   <span>Checkout Opens: <strong id="mO">0</strong></span>
   <span>Conversions: <strong id="mX">0</strong></span>
   <span>Rate: <strong id="mR">0%</strong></span>
@@ -1729,7 +1730,8 @@ window.addEventListener('load', function(){
 
 <script>
 // Persisted metrics (localStorage, per-browser/per-device)
-const m = JSON.parse(localStorage.getItem('numia_metrics') || '{"v":0,"c":0,"o":0,"x":0,"visits":[]}');
+const m = JSON.parse(localStorage.getItem('numia_metrics') || '{"v":0,"c":0,"o":0,"x":0,"a":0,"visits":[]}');
+if (typeof m.a !== 'number') m.a = 0;
 m.v++;
 m.visits.push({ time: new Date().toISOString(), ua: navigator.userAgent, ref: document.referrer || 'direct' });
 saveMetrics();
@@ -1738,6 +1740,7 @@ function saveMetrics() {
   localStorage.setItem('numia_metrics', JSON.stringify(m));
   document.getElementById('mV').textContent = m.v;
   document.getElementById('mC').textContent = m.c;
+  document.getElementById('mA').textContent = m.a;
   document.getElementById('mO').textContent = m.o;
   document.getElementById('mX').textContent = m.x;
   document.getElementById('mR').textContent = m.v > 0 ? ((m.x / m.v) * 100).toFixed(1) + '%' : '0%';
@@ -1777,9 +1780,10 @@ function showAnalytics() {
     '<h2 style="font-size:1.3rem;font-weight:800;">Numia Analytics</h2>' +
     '<button onclick="document.getElementById(\'analyticsPanel\').remove()" style="background:none;border:1px solid rgba(255,255,255,0.3);color:white;padding:0.4rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;">Close</button>' +
     '</div>' +
-    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">' +
+    '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:2rem;">' +
     '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.v||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">Page Views</div></div>' +
     '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.c||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">CTA Clicks</div></div>' +
+    '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.a||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">Agent Tries</div></div>' +
     '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.o||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">Checkout Opens</div></div>' +
     '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.x||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">Conversions</div></div>' +
     '</div>' +
@@ -1843,6 +1847,8 @@ function heroGetStream() {
 
 async function startHeroDemo() {
   if (heroDemoRunning) return;
+  m.a++;
+  saveMetrics();
   heroDemoRunning = true;
   heroDemoToken++;
   const token = heroDemoToken;
