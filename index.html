@@ -1728,13 +1728,71 @@ window.addEventListener('load', function(){
 </div>
 
 <script>
-const m={v:1,c:0,o:0,x:0};
-function upd(){document.getElementById('mV').textContent=m.v;document.getElementById('mC').textContent=m.c;document.getElementById('mO').textContent=m.o;document.getElementById('mX').textContent=m.x;document.getElementById('mR').textContent=m.v>0?((m.x/m.v)*100).toFixed(1)+'%':'0%';}
+// Persisted metrics (localStorage, per-browser/per-device)
+const m = JSON.parse(localStorage.getItem('numia_metrics') || '{"v":0,"c":0,"o":0,"x":0,"visits":[]}');
+m.v++;
+m.visits.push({ time: new Date().toISOString(), ua: navigator.userAgent, ref: document.referrer || 'direct' });
+saveMetrics();
+
+function saveMetrics() {
+  localStorage.setItem('numia_metrics', JSON.stringify(m));
+  document.getElementById('mV').textContent = m.v;
+  document.getElementById('mC').textContent = m.c;
+  document.getElementById('mO').textContent = m.o;
+  document.getElementById('mX').textContent = m.x;
+  document.getElementById('mR').textContent = m.v > 0 ? ((m.x / m.v) * 100).toFixed(1) + '%' : '0%';
+}
+
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>10));
-function goTo(s){const el=document.querySelector(s);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});m.c++;upd();}
-function openCheckout(){document.getElementById('checkoutModal').classList.add('active');m.o++;upd();}
+function goTo(s){const el=document.querySelector(s);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});m.c++;saveMetrics();}
+function openCheckout(){document.getElementById('checkoutModal').classList.add('active');m.o++;saveMetrics();}
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active');}
-function submitCheckout(){const i=document.getElementById('ckEmail');const e=i.value.trim();if(!e||!e.includes('@')||!e.includes('.')){i.style.borderColor='#F87171';i.focus();return;}i.style.borderColor='';const t=document.getElementById('tyEmail');if(t)t.textContent=e;m.x++;upd();document.getElementById('checkoutModal').classList.remove('active');document.getElementById('tyModal').classList.add('active');}
+function submitCheckout(){const i=document.getElementById('ckEmail');const e=i.value.trim();if(!e||!e.includes('@')||!e.includes('.')){i.style.borderColor='#F87171';i.focus();return;}i.style.borderColor='';const t=document.getElementById('tyEmail');if(t)t.textContent=e;m.x++;saveMetrics();document.getElementById('checkoutModal').classList.remove('active');document.getElementById('tyModal').classList.add('active');}
+
+// Hidden admin panel — Ctrl/Cmd + Shift + A
+document.addEventListener('keydown', function(e){
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+    e.preventDefault();
+    showAnalytics();
+  }
+});
+
+function showAnalytics() {
+  if (document.getElementById('analyticsPanel')) return;
+  const data = JSON.parse(localStorage.getItem('numia_metrics') || '{}');
+  const overlay = document.createElement('div');
+  overlay.id = 'analyticsPanel';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);color:white;padding:2rem;overflow-y:auto;font-family:Plus Jakarta Sans,monospace;font-size:0.85rem;';
+
+  const visitLog = (data.visits || []).map((v,i) =>
+    '<div style="padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.1);">' +
+    '<strong>#' + (i+1) + '</strong> \u00b7 ' + new Date(v.time).toLocaleString() +
+    ' \u00b7 <span style="color:#00B140;">' + (v.ref || 'direct') + '</span>' +
+    ' \u00b7 <span style="opacity:0.5;font-size:0.7rem;">' + (v.ua || '').substring(0,80) + '...</span></div>'
+  ).join('');
+
+  overlay.innerHTML =
+    '<div style="max-width:700px;margin:0 auto;">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">' +
+    '<h2 style="font-size:1.3rem;font-weight:800;">Numia Analytics</h2>' +
+    '<button onclick="document.getElementById(\'analyticsPanel\').remove()" style="background:none;border:1px solid rgba(255,255,255,0.3);color:white;padding:0.4rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;">Close</button>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">' +
+    '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.v||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">Page Views</div></div>' +
+    '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.c||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">CTA Clicks</div></div>' +
+    '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.o||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">Checkout Opens</div></div>' +
+    '<div style="background:rgba(255,255,255,0.08);padding:1rem;border-radius:12px;text-align:center;"><div style="font-size:1.8rem;font-weight:800;color:#00B140;">' + (data.x||0) + '</div><div style="opacity:0.6;font-size:0.75rem;">Conversions</div></div>' +
+    '</div>' +
+    '<h3 style="font-size:1rem;font-weight:700;margin-bottom:0.75rem;">Visit Log (' + (data.visits||[]).length + ' total)</h3>' +
+    '<div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:1rem;max-height:400px;overflow-y:auto;">' + (visitLog || '<div style="opacity:0.4;">No visits recorded</div>') + '</div>' +
+    '<div style="margin-top:1.5rem;display:flex;gap:0.75rem;">' +
+    '<button onclick="if(confirm(\'Reset all analytics data?\')){localStorage.removeItem(\'numia_metrics\');location.reload();}" style="background:#F87171;color:white;border:none;padding:0.6rem 1.2rem;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;font-size:0.8rem;">Reset Data</button>' +
+    '<button onclick="navigator.clipboard.writeText(JSON.stringify(JSON.parse(localStorage.getItem(\'numia_metrics\')),null,2));this.textContent=\'Copied!\';setTimeout(()=>this.textContent=\'Copy Raw JSON\',1500);" style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:0.6rem 1.2rem;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:600;font-size:0.8rem;">Copy Raw JSON</button>' +
+    '</div>' +
+    '</div>';
+
+  document.body.appendChild(overlay);
+}
 function closeTY(){document.getElementById('tyModal').classList.remove('active');}
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('active');}));
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:0.1});
@@ -1951,5 +2009,8 @@ function resetHeroDemo() {
 })();
 
 </script>
+
+<!-- Cross-device visitor ping (free, no signup — hits.sh) -->
+<img src="https://hits.sh/felipejango-ux.github.io/numia-landingpage.svg?style=flat-square&label=visitors&color=00B140" alt="" style="position:fixed;bottom:40px;right:10px;height:20px;opacity:0.4;z-index:301;" />
 </body>
 </html>
