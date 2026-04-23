@@ -255,46 +255,312 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* Phone mockup */
-.hero-phone { position: relative; display: flex; justify-content: center; }
-.phone-mock {
-  width: 280px; border-radius: 36px;
-  background: var(--white);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
-  overflow: hidden; position: relative;
+/* ─── Hero phone mockup (two-phone composition) ─── */
+.hero-phone {
+  position: relative; display: flex;
+  justify-content: center; align-items: center;
+  min-height: 560px;
 }
+.phone-mock-1, .phone-mock-2 {
+  width: 260px; border-radius: 32px;
+  background: var(--white); overflow: hidden;
+  transition: transform 0.45s cubic-bezier(0.22,0.61,0.36,1);
+}
+.phone-mock-1 {
+  position: relative; z-index: 2;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+}
+.phone-mock-2 {
+  position: absolute; z-index: 1;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+  transform: translateX(60px) translateY(15px) rotate(4deg) scale(0.92);
+  opacity: 0.97;
+}
+.hero-phone:hover .phone-mock-1 { transform: translateY(-4px); }
+.hero-phone:hover .phone-mock-2 { transform: translateX(60px) translateY(13px) rotate(4deg) scale(0.92); }
+
 .phone-mock-notch {
-  width: 120px; height: 28px; background: var(--gray-900);
-  border-radius: 0 0 16px 16px;
+  width: 110px; height: 24px; background: var(--gray-900);
+  border-radius: 0 0 14px 14px;
   margin: 0 auto; position: relative; z-index: 2;
 }
-.phone-mock-screen { padding: 1.2rem; text-align: center; }
-.phone-mock-greeting { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
-.phone-mock-balance {
-  font-size: 2.4rem; font-weight: 800; color: var(--gray-900);
-  letter-spacing: -0.02em; margin: 0.25rem 0;
+.phone-mock-screen { padding: 0.8rem 0.85rem 0.9rem; }
+
+/* ── Phone 1: Silent Core dashboard ── */
+.pm-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 0.15rem 0 0.7rem;
+}
+.pm-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.62rem; font-weight: 800; color: var(--green);
+  letter-spacing: -0.035em;
+}
+.pm-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--green-100); color: var(--green-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.62rem; font-weight: 800;
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
-.phone-mock-label { font-size: 0.65rem; font-weight: 700; color: var(--green); letter-spacing: 0.08em; text-transform: uppercase; }
-.phone-mock-txs { margin-top: 1.2rem; text-align: left; }
-.phone-mock-tx {
+.pm-balance {
+  background: linear-gradient(135deg, #005C28, #00B140);
+  border-radius: 14px; padding: 0.85rem 0.95rem 0.95rem;
+  color: var(--white); position: relative; overflow: hidden;
+}
+.pm-balance::before {
+  content: ''; position: absolute; right: -30px; top: -40px;
+  width: 110px; height: 110px; border-radius: 50%;
+  background: rgba(255,255,255,0.07); pointer-events: none;
+}
+.pm-balance::after {
+  content: ''; position: absolute; left: -20px; bottom: -35px;
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(255,255,255,0.05); pointer-events: none;
+}
+.pm-balance-label {
+  font-size: 0.5rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.7);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 0.2rem; position: relative;
+}
+.pm-balance-amount {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.8rem; font-weight: 800; line-height: 1;
+  letter-spacing: -0.03em; position: relative;
+}
+.pm-balance-pill {
+  display: inline-block; margin-top: 0.55rem;
+  background: rgba(255,255,255,0.18);
+  padding: 0.22rem 0.55rem; border-radius: 100px;
+  font-size: 0.5rem; font-weight: 700; color: var(--white);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.01em; position: relative;
+}
+.pm-tiles {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
+  margin-top: 0.7rem;
+}
+.pm-tile {
+  background: var(--white); border: 1px solid var(--gray-100);
+  border-radius: 10px; padding: 0.5rem 0.6rem;
+  display: flex; flex-direction: column; gap: 0.1rem;
+}
+.pm-tile-icon { font-size: 0.82rem; line-height: 1; }
+.pm-tile-label {
+  font-size: 0.6rem; font-weight: 700; color: var(--gray-800);
+  font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.01em;
+  margin-top: 0.15rem;
+}
+.pm-tile-sub { font-size: 0.52rem; color: var(--gray-500); font-weight: 600; }
+.pm-tile-sub.on { color: var(--green); }
+.pm-txs { margin-top: 0.75rem; }
+.pm-tx {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 0.55rem 0; border-bottom: 1px solid var(--gray-100);
-  font-size: 0.72rem;
+  padding: 0.35rem 0; border-bottom: 1px solid var(--gray-100);
 }
-.phone-mock-tx span:first-child { color: var(--gray-600); font-weight: 500; }
-.phone-mock-tx span:last-child { font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; }
-.phone-mock-tx .neg { color: var(--gray-800); }
-.phone-mock-tx .pos { color: var(--green); }
-.phone-mock-btn {
-  width: 48px; height: 48px; border-radius: 50%;
+.pm-tx:last-child { border-bottom: none; }
+.pm-tx-name { font-size: 0.6rem; color: var(--gray-700); font-weight: 500; }
+.pm-tx-name .meta { color: var(--gray-400); font-weight: 500; }
+.pm-tx-amt {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700; font-size: 0.62rem;
+}
+.pm-tx-amt.neg { color: var(--gray-800); }
+.pm-tx-amt.pos { color: var(--green); }
+.pm-agent-btn {
+  width: 36px; height: 36px; border-radius: 50%;
   background: linear-gradient(135deg, var(--green), var(--green-dark));
-  margin: 1.5rem auto 0.5rem; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 6px 20px rgba(0,177,64,0.35);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0.85rem auto 0.15rem;
+  box-shadow: 0 4px 14px rgba(0,177,64,0.35);
   animation: mock-pulse 2.5s infinite;
+  border: none; cursor: pointer; padding: 0;
+  transition: transform 0.18s ease;
 }
-@keyframes mock-pulse { 0%,100%{box-shadow: 0 6px 20px rgba(0,177,64,0.35);} 50%{box-shadow: 0 6px 30px rgba(0,177,64,0.5);} }
-.phone-mock-btn svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 2.5; }
+.pm-agent-btn:hover { transform: scale(1.05); }
+.pm-agent-btn:active { transform: scale(0.93); }
+.pm-agent-btn.is-running { pointer-events: none; opacity: 0.65; animation: none; }
+@keyframes mock-pulse { 0%,100%{box-shadow: 0 4px 14px rgba(0,177,64,0.35);} 50%{box-shadow: 0 4px 22px rgba(0,177,64,0.55);} }
+.pm-agent-btn svg { width: 14px; height: 14px; stroke: white; fill: none; stroke-width: 2.5; }
+.pm-tap-hint {
+  font-size: 0.5rem; color: var(--gray-400);
+  text-align: center; margin-top: 0.15rem;
+  font-weight: 600; letter-spacing: 0.05em;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  text-transform: uppercase;
+  transition: opacity 0.3s;
+}
+.pm-tap-hint.hidden { opacity: 0; }
+
+/* ── Phone 2: Agent in action ── */
+.pm2-header {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.1rem 0 0.55rem;
+  border-bottom: 1px solid var(--gray-100);
+  margin-bottom: 0.55rem;
+}
+.pm2-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); animation: pulse-dot 1.5s infinite;
+}
+.pm2-header-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.6rem; font-weight: 700; color: var(--gray-700);
+  letter-spacing: -0.01em;
+}
+.pm2-wave {
+  display: flex; justify-content: center; gap: 3px;
+  align-items: center; height: 18px; margin: 0.25rem 0 0.4rem;
+}
+.pm2-wave span {
+  width: 3px; border-radius: 3px; background: var(--green);
+  animation: vwave 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
+.pm2-wave span:nth-child(1){ height: 6px;  animation-delay: 0s; }
+.pm2-wave span:nth-child(2){ height: 14px; animation-delay: .1s; }
+.pm2-wave span:nth-child(3){ height: 16px; animation-delay: .2s; }
+.pm2-wave span:nth-child(4){ height: 8px;  animation-delay: .3s; }
+.pm2-bubbles {
+  display: flex; flex-direction: column; gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+.pm2-bubble {
+  max-width: 85%; font-size: 0.6rem; line-height: 1.35;
+  padding: 0.4rem 0.6rem; border-radius: 10px; font-weight: 500;
+}
+.pm2-bubble.user {
+  align-self: flex-end;
+  background: var(--green); color: white;
+  border-bottom-right-radius: 3px;
+}
+.pm2-bubble.agent {
+  align-self: flex-start;
+  background: var(--green-100); color: var(--gray-800);
+  border-bottom-left-radius: 3px;
+}
+.pm2-success {
+  align-self: stretch;
+  background: linear-gradient(135deg, var(--green), var(--green-dark));
+  color: white; border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.55rem; font-weight: 700; text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.005em; line-height: 1.4;
+}
+
+/* ─── Phone 2 demo stream + swap state ─── */
+.pm2-stream {
+  display: flex; flex-direction: column;
+  gap: 0.35rem; min-height: 165px;
+}
+.pm2-listen {
+  align-self: center;
+  font-size: 0.58rem; font-weight: 700; color: var(--green);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  animation: pm2-listen-pulse 1.6s ease-in-out infinite;
+  letter-spacing: 0.02em;
+}
+@keyframes pm2-listen-pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.pm2-item { animation: pm2-in 0.28s ease both; }
+@keyframes pm2-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.pm2-typing {
+  align-self: flex-start;
+  display: flex; gap: 3px; align-items: center;
+  padding: 0.45rem 0.6rem;
+  background: #F1F3F2; border-radius: 10px 10px 10px 3px;
+}
+.pm2-typing span {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--gray-400);
+  animation: pm2-type 1.2s ease-in-out infinite;
+}
+.pm2-typing span:nth-child(2){ animation-delay: 0.15s; }
+.pm2-typing span:nth-child(3){ animation-delay: 0.3s; }
+@keyframes pm2-type {
+  0%,80%,100% { transform: translateY(0); opacity: 0.4; }
+  40%         { transform: translateY(-3px); opacity: 1; }
+}
+.pm2-bubble { align-self: flex-start; }
+.pm2-bubble.user { align-self: flex-end; }
+.pm2-card {
+  align-self: stretch;
+  background: var(--white); border: 1px solid var(--gray-100);
+  border-radius: 10px; padding: 0.55rem 0.65rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.pm2-card-label {
+  font-size: 0.5rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--green);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 0.22rem;
+}
+.pm2-card-main {
+  font-size: 0.65rem; font-weight: 700; color: var(--gray-900);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.01em; line-height: 1.3;
+}
+.pm2-card-sub {
+  font-size: 0.5rem; color: var(--gray-500);
+  margin-top: 0.18rem; font-weight: 500;
+}
+.pm2-card-btns {
+  display: flex; gap: 0.3rem; margin-top: 0.5rem;
+}
+.pm2-card-btn {
+  flex: 1; padding: 0.32rem; border-radius: 7px;
+  font-size: 0.55rem; font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  border: none; text-align: center; cursor: default;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.pm2-card-btn.primary   { background: var(--green); color: white; }
+.pm2-card-btn.secondary { background: #F1F3F2; color: var(--gray-600); }
+.pm2-card-btn.tapping { animation: pm2-tap 0.45s ease; }
+@keyframes pm2-tap {
+  0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,177,64,0); }
+  35%  { transform: scale(0.9); box-shadow: 0 0 0 5px rgba(0,177,64,0.3); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,177,64,0); }
+}
+.pm2-replay {
+  margin: 0.4rem auto 0; align-self: center;
+  background: transparent; border: 1px solid var(--green);
+  color: var(--green); font-weight: 700;
+  font-size: 0.6rem; padding: 0.3rem 0.85rem;
+  border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer; letter-spacing: 0.02em;
+  transition: all 0.2s;
+  animation: pm2-in 0.35s ease both;
+}
+.pm2-replay:hover  { background: var(--green); color: white; }
+.pm2-replay:active { transform: scale(0.96); }
+
+/* Phone swap — active demo state (desktop only) */
+.hero-phone.demo-active .phone-mock-1 {
+  transform: translateX(-60px) translateY(15px) rotate(-4deg) scale(0.92);
+  opacity: 0.9; z-index: 1;
+}
+.hero-phone.demo-active .phone-mock-2 {
+  transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+  opacity: 1; z-index: 2;
+}
+.hero-phone.demo-active:hover .phone-mock-1 {
+  transform: translateX(-60px) translateY(11px) rotate(-4deg) scale(0.92);
+}
+.hero-phone.demo-active:hover .phone-mock-2 { transform: translateY(-4px); }
+/* Background phone is clickable to swap forward */
+.phone-mock-2 { cursor: pointer; }
+.hero-phone.demo-active .phone-mock-1 { cursor: pointer; }
+.hero-phone.demo-active .phone-mock-2 { cursor: default; }
+
+/* Callout animation */
+@keyframes fadeInLeft { from { opacity:0; transform:translateX(-15px); } to { opacity:1; transform:translateX(0); } }
 
 /* ═══════════════════ SOCIAL PROOF ═══════════════════ */
 .proof-bar {
@@ -661,6 +927,36 @@ body {
   margin: 0 auto 1.25rem;
 }
 .thankyou-icon svg { width: 30px; height: 30px; stroke: white; fill: none; stroke-width: 2.5; }
+/* Animated Numia smiley for the thank-you modal */
+.ty-smiley-wrap {
+  position: relative; width: 84px; height: 84px;
+  margin: 0 auto 1.25rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.ty-smiley-ring {
+  position: absolute; inset: 0;
+  border: 2.5px solid transparent;
+  border-top-color: rgba(255,255,255,0.85);
+  border-right-color: rgba(255,255,255,0.35);
+  border-radius: 50%;
+  animation: ty-ring-rotate 1.4s linear infinite;
+}
+.ty-smiley {
+  width: 54px; height: 54px;
+  display: flex; align-items: center; justify-content: center;
+  animation: ty-smiley-bounce 1.6s ease-in-out infinite;
+}
+.ty-smiley svg { width: 100%; height: 100%; }
+@keyframes ty-ring-rotate { to { transform: rotate(360deg); } }
+@keyframes ty-smiley-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-4px) scale(1.08); }
+}
+/* Waitlist intro line inside the simplified modal */
+.waitlist-intro {
+  font-size: 0.88rem; color: var(--gray-600);
+  line-height: 1.55; margin-bottom: 1.1rem;
+}
 .thankyou-modal h2 {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1.7rem; font-weight: 800; margin-bottom: 0.6rem;
@@ -834,7 +1130,10 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
   .hero-text p.lede { margin-left: auto; margin-right: auto; }
   .hero-cta-row { justify-content: center; }
   .hero-trust { justify-content: center; }
-  .hero-phone { margin-top: 2rem; }
+  .hero-phone { margin-top: 2rem; min-height: 0; }
+  .phone-mock-2 { display: none; }
+  .phone-mock-1 { width: 290px; }
+  .hero-phone > div[style*="left:-80px"] { display: none; }
   .quotes-grid, .values-grid, .problem-grid { grid-template-columns: 1fr; }
   .how-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
   .guardian-grid, .advisor-grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -853,6 +1152,7 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
 </style>
 </head>
 <body>
+<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}</script>
 
 <!-- ═══════════════════ NAV ═══════════════════ -->
 <nav class="nav" id="nav">
@@ -865,7 +1165,7 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
     <a href="#guardian">Guardian</a>
     <a href="#pricing">Pricing</a>
     <a href="#contact">Contact</a>
-    <button class="nav-cta" onclick="scrollTo('#pricing')">Join Waitlist</button>
+    <button class="nav-cta" onclick="goTo('#pricing')">Join Waitlist</button>
   </div>
 </nav>
 
@@ -877,8 +1177,8 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
       <h1>Banking<br>without the<br><span class="accent">noise.</span></h1>
       <p class="lede">Numia is the neobank built for minds that work a little differently. Just tell your agent what you need — it handles the rest, with you in full control.</p>
       <div class="hero-cta-row">
-        <button class="btn-primary" onclick="scrollTo('#pricing')">Get Early Access →</button>
-        <button class="btn-ghost" onclick="scrollTo('#how')">See How It Works</button>
+        <button class="btn-primary" onclick="goTo('#pricing')">Get Early Access →</button>
+        <button class="btn-ghost" onclick="goTo('#how')">See How It Works</button>
       </div>
       <div class="hero-trust">
         <span class="hero-trust-item"><span class="check">✓</span> KYA Verified</span>
@@ -887,20 +1187,61 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
       </div>
     </div>
     <div class="hero-phone fi">
-      <div class="phone-mock">
+      <!-- Phone 1 — Silent Core dashboard -->
+      <div class="phone-mock-1">
         <div class="phone-mock-notch"></div>
         <div class="phone-mock-screen">
-          <div class="phone-mock-greeting">Good morning, Alex</div>
-          <div class="phone-mock-balance">€1,247.50</div>
-          <div class="phone-mock-label">Safe to Spend</div>
-          <div class="phone-mock-txs">
-            <div class="phone-mock-tx"><span>Mercadona</span><span class="neg">−€23.40</span></div>
-            <div class="phone-mock-tx"><span>Disability Pension</span><span class="pos">+€1,200</span></div>
-            <div class="phone-mock-tx"><span>Rent</span><span class="neg">−€650.00</span></div>
+          <div class="pm-topbar">
+            <div class="pm-logo">numia.</div>
+            <div class="pm-avatar">A</div>
           </div>
-          <div class="phone-mock-btn">
+          <div class="pm-balance">
+            <div class="pm-balance-label">Safe to Spend</div>
+            <div class="pm-balance-amount">€1,247.50</div>
+            <div class="pm-balance-pill">+€12.09/day</div>
+          </div>
+          <div class="pm-tiles">
+            <div class="pm-tile"><div class="pm-tile-icon">🛡</div><div class="pm-tile-label">Guardian</div><div class="pm-tile-sub on">Active ✓</div></div>
+            <div class="pm-tile"><div class="pm-tile-icon">📊</div><div class="pm-tile-label">Insights</div><div class="pm-tile-sub on">On Track</div></div>
+            <div class="pm-tile"><div class="pm-tile-icon">🔄</div><div class="pm-tile-label">Subs</div><div class="pm-tile-sub">5 active</div></div>
+            <div class="pm-tile"><div class="pm-tile-icon">🌍</div><div class="pm-tile-label">Accounts</div><div class="pm-tile-sub">3 linked</div></div>
+          </div>
+          <div class="pm-txs">
+            <div class="pm-tx">
+              <span class="pm-tx-name">Mercadona <span class="meta">· Today</span></span>
+              <span class="pm-tx-amt neg">−€23.40</span>
+            </div>
+            <div class="pm-tx">
+              <span class="pm-tx-name">Salary <span class="meta">· Mar 15</span></span>
+              <span class="pm-tx-amt pos">+€1,200</span>
+            </div>
+          </div>
+          <button class="pm-agent-btn" id="pm-agent-btn" onclick="startHeroDemo()" aria-label="Try the agent demo">
             <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Phone 2 — Agent in action, peeking out behind (interactive) -->
+      <div class="phone-mock-2">
+        <div class="phone-mock-notch"></div>
+        <div class="phone-mock-screen">
+          <div class="pm2-header">
+            <div class="pm2-dot"></div>
+            <div class="pm2-header-label">Numia Agent · Active</div>
           </div>
+          <div class="pm2-stream" id="pm2-stream">
+            <div class="pm2-bubble pm2-item user">Cancel my Disney+</div>
+            <div class="pm2-bubble pm2-item agent">Found it — €8.99/mo. Canceling now.</div>
+            <div class="pm2-success pm2-item">✓ Disney+ canceled · Save €107/yr</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:absolute;left:-80px;bottom:60px;display:flex;align-items:center;gap:8px;animation:fadeInLeft 0.8s ease 1.5s both;">
+        <div style="text-align:center;">
+          <svg width="28" height="20" viewBox="0 0 20 15" fill="none"><circle cx="6" cy="5" r="2.5" fill="#00B140"/><circle cx="14" cy="5" r="2.5" fill="#00B140"/><path d="M4 9 Q10 14 16 9" stroke="#00B140" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+          <div style="font-family:Plus Jakarta Sans,sans-serif;font-size:0.8rem;font-weight:700;color:#00B140;white-space:nowrap;">Try the agent →</div>
         </div>
       </div>
     </div>
@@ -1186,27 +1527,24 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
   </div>
 </section>
 
-<!-- ═══════════════════ CHECKOUT MODAL ═══════════════════ -->
+<!-- ═══════════════════ WAITLIST MODAL ═══════════════════ -->
 <div class="modal-overlay" id="checkoutModal">
   <div class="checkout-modal">
     <button class="checkout-close" onclick="closeCheckout()">×</button>
     <div class="checkout-head">
-      <h3>Numia · Early Access</h3>
-      <p>Secure your priority spot</p>
+      <h3>Join the Numia Waitlist</h3>
+      <p>We'll email you the moment early access opens.</p>
     </div>
     <div class="checkout-body">
-      <div class="checkout-field"><label>Email</label><input type="email" id="ckEmail" placeholder="you@email.com"/></div>
-      <div class="checkout-field"><label>Card Number</label><input type="text" placeholder="1234 5678 9012 3456" maxlength="19"/></div>
-      <div class="checkout-row">
-        <div class="checkout-field"><label>Expiry</label><input type="text" placeholder="MM / YY" maxlength="7"/></div>
-        <div class="checkout-field"><label>CVC</label><input type="text" placeholder="123" maxlength="4"/></div>
+      <div class="waitlist-intro">Leave your email — no card, no commitment. Just a heads-up when we launch in your region.</div>
+      <div class="checkout-field">
+        <label>Your email</label>
+        <input type="email" id="ckEmail" placeholder="you@email.com" autocomplete="email"/>
       </div>
-      <div class="checkout-field"><label>Cardholder Name</label><input type="text" placeholder="Full name on card"/></div>
-      <div class="checkout-total"><span>Total today</span><span>€12.99</span></div>
-      <button class="checkout-submit" onclick="submitCheckout()">Confirm Payment</button>
+      <button class="checkout-submit" onclick="submitCheckout()">Join Waitlist →</button>
       <div class="checkout-secure">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        256-bit SSL encrypted
+        We'll never share your email. Unsubscribe any time.
       </div>
     </div>
   </div>
@@ -1215,12 +1553,21 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
 <!-- ═══════════════════ THANK YOU MODAL ═══════════════════ -->
 <div class="modal-overlay" id="tyModal">
   <div class="thankyou-modal">
-    <div class="thankyou-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <h2>You're on the list.</h2>
-    <p>Numia is in <strong>closed beta</strong>. You are now on the priority waitlist — <strong>your card has not been charged</strong>.</p>
-    <p style="font-size:0.82rem;margin-top:0.4rem;">We'll notify you the moment early access opens in your region.</p>
-    <div class="safe">🔒 No charges. Priority spot secured.</div><br>
-    <button class="thankyou-close" onclick="closeTY()">Got it</button>
+    <div class="ty-smiley-wrap">
+      <div class="ty-smiley-ring"></div>
+      <div class="ty-smiley" aria-hidden="true">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="26" r="5" fill="#ffffff"/>
+          <path d="M30 23 Q38 17 46 23" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M10 38 Q30 54 50 38" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+    <h2>You're on the list!</h2>
+    <p>Thanks for signing up. We'll send a friendly email to <strong id="tyEmail">your inbox</strong> the moment Numia opens in your region.</p>
+    <p style="font-size:0.82rem;margin-top:0.6rem;opacity:0.8;">No charges, no spam — just one kind heads-up when it's your turn.</p>
+    <div class="safe">✉️ Keep an eye on your inbox</div><br>
+    <button class="thankyou-close" onclick="closeTY()">Got it — thanks!</button>
   </div>
 </div>
 
@@ -1305,14 +1652,229 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
 const m={v:1,c:0,o:0,x:0};
 function upd(){document.getElementById('mV').textContent=m.v;document.getElementById('mC').textContent=m.c;document.getElementById('mO').textContent=m.o;document.getElementById('mX').textContent=m.x;document.getElementById('mR').textContent=m.v>0?((m.x/m.v)*100).toFixed(1)+'%':'0%';}
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>10));
-function scrollTo(s){document.querySelector(s).scrollIntoView({behavior:'smooth'});m.c++;upd();}
+function goTo(s){const el=document.querySelector(s);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});m.c++;upd();}
 function openCheckout(){document.getElementById('checkoutModal').classList.add('active');m.o++;upd();}
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active');}
-function submitCheckout(){const e=document.getElementById('ckEmail').value;if(!e||!e.includes('@')){document.getElementById('ckEmail').style.borderColor='#F87171';return;}m.x++;upd();document.getElementById('checkoutModal').classList.remove('active');document.getElementById('tyModal').classList.add('active');}
+function submitCheckout(){const i=document.getElementById('ckEmail');const e=i.value.trim();if(!e||!e.includes('@')||!e.includes('.')){i.style.borderColor='#F87171';i.focus();return;}i.style.borderColor='';const t=document.getElementById('tyEmail');if(t)t.textContent=e;m.x++;upd();document.getElementById('checkoutModal').classList.remove('active');document.getElementById('tyModal').classList.add('active');}
 function closeTY(){document.getElementById('tyModal').classList.remove('active');}
 document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('active');}));
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:0.1});
 document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+/* ═══════════════════ HERO PHONE — interactive agent demo ═══════════════════ */
+// Static preview shown when Phone 2 is peeking out (no demo running)
+const HERO_P2_TEASER_HTML = `
+  <div class="pm2-bubble pm2-item user">Cancel my Disney+</div>
+  <div class="pm2-bubble pm2-item agent">Found it \u2014 \u20ac8.99/mo. Canceling now.</div>
+  <div class="pm2-success pm2-item">\u2713 Disney+ canceled \u00b7 Save \u20ac107/yr</div>
+`;
+// Demo entry state — wave + Listening… — shown the moment the demo starts
+const HERO_P2_DEMO_INIT_HTML = `
+  <div class="pm2-wave pm2-item"><span></span><span></span><span></span><span></span></div>
+  <div class="pm2-listen pm2-item">Listening\u2026</div>
+`;
+
+let heroDemoRunning = false;
+let heroDemoToken   = 0;
+let heroDemoMode    = null;           // 'desktop' | 'mobile'
+let heroOriginalP1  = null;           // stashed Phone 1 innerHTML for mobile
+
+function heroSleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+function heroBubble(role, text) {
+  return `<div class="pm2-bubble pm2-item ${role}">${text}</div>`;
+}
+
+function heroGetStream() {
+  const isMobile = window.matchMedia('(max-width: 820px)').matches;
+  if (isMobile) {
+    const p1 = document.querySelector('.phone-mock-1 .phone-mock-screen');
+    heroOriginalP1 = p1.innerHTML;
+    p1.innerHTML = `
+      <div class="pm2-header">
+        <div class="pm2-dot"></div>
+        <div class="pm2-header-label">Numia Agent \u00b7 Active</div>
+      </div>
+      <div class="pm2-stream" id="pm2-stream-active">${HERO_P2_DEMO_INIT_HTML}</div>`;
+    return document.getElementById('pm2-stream-active');
+  }
+  document.querySelector('.hero-phone').classList.add('demo-active');
+  const stream = document.getElementById('pm2-stream');
+  stream.innerHTML = HERO_P2_DEMO_INIT_HTML;
+  return stream;
+}
+
+async function startHeroDemo() {
+  if (heroDemoRunning) return;
+  heroDemoRunning = true;
+  heroDemoToken++;
+  const token = heroDemoToken;
+  const alive = () => token === heroDemoToken;
+
+  const isMobile = window.matchMedia('(max-width: 820px)').matches;
+  heroDemoMode   = isMobile ? 'mobile' : 'desktop';
+
+  const stream = heroGetStream();   // captures mobile P1 HTML before replacing
+
+  // Fade the hint + disable the agent button (desktop only — on mobile Phone 1 is gone)
+  const hint = document.getElementById('pm-tap-hint');
+  if (hint) hint.classList.add('hidden');
+  const btn  = document.getElementById('pm-agent-btn');
+  if (btn)  btn.classList.add('is-running');
+
+  // Wait for the phone swap transition before filling the stream
+  if (!isMobile) await heroSleep(550);
+  if (!alive()) return;
+
+  await runHeroScript(stream, alive);
+  heroDemoRunning = false;
+}
+
+async function runHeroScript(s, alive) {
+  const add = html => { s.insertAdjacentHTML('beforeend', html); s.scrollTop = s.scrollHeight; };
+  const del = sel  => { const el = s.querySelector(sel); if (el) el.remove(); };
+
+  // ── Part 1: Cancel Disney+ ──────────────────────────────────────────
+  // Step 1: Listening state is already rendered. Wait before user speaks.
+  await heroSleep(1500); if (!alive()) return;
+
+  // Step 2: User bubble
+  add(heroBubble('user', 'Cancel my Disney+'));
+  await heroSleep(1000); if (!alive()) return;
+
+  // Step 3: Stop the wave, show typing indicator briefly
+  del('.pm2-wave'); del('.pm2-listen');
+  add('<div class="pm2-typing pm2-item" data-role="typing"><span></span><span></span><span></span></div>');
+  await heroSleep(800); if (!alive()) return;
+  del('[data-role="typing"]');
+
+  // Step 4: Agent bubble
+  add(heroBubble('agent', 'Found your Disney+ \u2014 \u20ac8.99/mo. Canceling now.'));
+  await heroSleep(1200); if (!alive()) return;
+
+  // Step 5: Confirmation card
+  add(`
+    <div class="pm2-card pm2-item" data-role="confirm">
+      <div class="pm2-card-label">Cancel Subscription</div>
+      <div class="pm2-card-main">Disney+ \u00b7 \u20ac8.99/mo</div>
+      <div class="pm2-card-btns">
+        <button class="pm2-card-btn primary">Confirm</button>
+        <button class="pm2-card-btn secondary">Keep</button>
+      </div>
+    </div>`);
+  await heroSleep(1000); if (!alive()) return;
+
+  // Step 6: Tap the Confirm button
+  const cBtn = s.querySelector('[data-role="confirm"] .pm2-card-btn.primary');
+  if (cBtn) cBtn.classList.add('tapping');
+  await heroSleep(500); if (!alive()) return;
+
+  // Step 7: Card disappears, success card slides in
+  del('[data-role="confirm"]');
+  add('<div class="pm2-success pm2-item">\u2713 Disney+ canceled \u00b7 Save \u20ac107/yr</div>');
+  await heroSleep(1200); if (!alive()) return;
+
+  // Step 8: Agent follow-up
+  add(heroBubble('agent', 'Done! Need anything else?'));
+  await heroSleep(1500); if (!alive()) return;
+
+  // ── Part 2: Amazon purchase ─────────────────────────────────────────
+  // Step 9: Wave restarts briefly, then user bubble
+  add('<div class="pm2-wave pm2-item" data-role="wave2"><span></span><span></span><span></span><span></span></div>');
+  await heroSleep(500); if (!alive()) return;
+  del('[data-role="wave2"]');
+  add(heroBubble('user', 'I need to buy noise-canceling headphones on Amazon'));
+  await heroSleep(1500); if (!alive()) return;
+
+  // Step 10: Agent bubble
+  add(heroBubble('agent', 'Found Sony WH-1000XM4 on Amazon \u2014 \u20ac49.90. Want me to order them?'));
+  await heroSleep(1000); if (!alive()) return;
+
+  // Step 11: Purchase confirmation card
+  add(`
+    <div class="pm2-card pm2-item" data-role="purchase">
+      <div class="pm2-card-label">Confirm Purchase</div>
+      <div class="pm2-card-main">\ud83c\udfa7 Sony WH-1000XM4</div>
+      <div class="pm2-card-sub">\u20ac49.90 \u00b7 Amazon \u00b7 Est. delivery Thu</div>
+      <div class="pm2-card-btns">
+        <button class="pm2-card-btn primary">Buy Now</button>
+        <button class="pm2-card-btn secondary">Cancel</button>
+      </div>
+    </div>`);
+  await heroSleep(1500); if (!alive()) return;
+
+  // Step 12: Tap Buy Now
+  const bBtn = s.querySelector('[data-role="purchase"] .pm2-card-btn.primary');
+  if (bBtn) bBtn.classList.add('tapping');
+  await heroSleep(500); if (!alive()) return;
+
+  // Step 13: Card disappears, success
+  del('[data-role="purchase"]');
+  add('<div class="pm2-success pm2-item">\u2713 Ordered \u00b7 Arrives Thursday</div>');
+  await heroSleep(1200); if (!alive()) return;
+
+  // Step 14: Final agent bubble
+  add(heroBubble('agent', 'Order placed! Paid with Visa \u20224421. Anything else?'));
+  await heroSleep(1500); if (!alive()) return;
+
+  // Step 15: Replay button
+  add('<button class="pm2-replay" onclick="resetHeroDemo()">\u21bb Replay</button>');
+}
+
+function resetHeroDemo() {
+  heroDemoToken++;           // cancels any in-flight script
+  heroDemoRunning = false;
+
+  if (heroDemoMode === 'mobile' && heroOriginalP1 !== null) {
+    const p1 = document.querySelector('.phone-mock-1 .phone-mock-screen');
+    if (p1) p1.innerHTML = heroOriginalP1;
+    heroOriginalP1 = null;
+  } else {
+    document.querySelector('.hero-phone').classList.remove('demo-active');
+    const stream = document.getElementById('pm2-stream');
+    if (stream) stream.innerHTML = HERO_P2_TEASER_HTML;   // back to static teaser
+    const btn  = document.getElementById('pm-agent-btn');
+    if (btn)  btn.classList.remove('is-running');
+    const hint = document.getElementById('pm-tap-hint');
+    if (hint) hint.classList.remove('hidden');
+  }
+  heroDemoMode = null;
+}
+
+// Click-to-swap: whichever phone is in the back, click it to bring it forward
+(function heroPhoneSwapInit(){
+  const hp = document.querySelector('.hero-phone');
+  const p1 = document.querySelector('.phone-mock-1');
+  const p2 = document.querySelector('.phone-mock-2');
+  if (!hp || !p1 || !p2) return;
+
+  // Click on Phone 1 while it's in the back (demo-active) = swap back to home.
+  // Ignore clicks originating from the agent button so it can start the demo cleanly.
+  p1.addEventListener('click', function(e){
+    if (e.target.closest('.pm-agent-btn')) return;
+    if (hp.classList.contains('demo-active')) resetHeroDemo();
+  });
+
+  // Click on Phone 2 while it's in the back (default state) = bring Phone 2 forward
+  // as a pure visual swap (no demo — only the agent button triggers the demo).
+  p2.addEventListener('click', function(e){
+    if (hp.classList.contains('demo-active')) return;   // Phone 2 already in front
+    if (heroDemoRunning) return;
+    // Don't hijack clicks on real controls inside Phone 2
+    if (e.target.closest('.pm2-replay, .pm2-card-btn')) return;
+    hp.classList.add('demo-active');
+    const btn  = document.getElementById('pm-agent-btn');
+    if (btn)  btn.classList.add('is-running');
+    const hint = document.getElementById('pm-tap-hint');
+    if (hint) hint.classList.add('hidden');
+    heroDemoMode = 'desktop';   // so reset path knows how to undo
+  });
+})();
+
+// Always open the page at the top on load / refresh
+window.addEventListener('load', function(){
+  setTimeout(function(){ window.scrollTo(0, 0); }, 0);
+});
 </script>
 </body>
 </html>
