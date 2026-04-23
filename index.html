@@ -186,10 +186,56 @@ body {
 }
 .hero::after {
   content: '';
-  position: absolute; bottom: -150px; left: -100px;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(0,177,64,0.04) 0%, transparent 70%);
-  pointer-events: none;
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 20% 50%, rgba(0,177,64,0.03) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(0,177,64,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(0,177,64,0.02) 0%, transparent 50%);
+  animation: meshMove 20s ease-in-out infinite;
+  pointer-events: none; z-index: 0;
+}
+@keyframes meshMove {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33%      { transform: translate(2%, -1%) rotate(1deg); }
+  66%      { transform: translate(-1%, 2%) rotate(-1deg); }
+}
+/* Subtle floating decorative elements in the hero */
+.hero-float { position: absolute; pointer-events: none; z-index: 0; animation: heroFloat 6s ease-in-out infinite; }
+.hero-float-a {
+  top: 130px; right: 7%;
+  width: 60px; height: 100px; border-radius: 14px;
+  border: 1px solid rgba(0,177,64,0.45);
+  opacity: 0.13;
+  --r: 15deg;
+}
+.hero-float-b {
+  bottom: 120px; left: 6%;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(0,177,64,0.04);
+  --r: 0deg;
+  animation-delay: 2s;
+}
+.hero-float-c {
+  bottom: 160px; right: 10%;
+  width: 30px; height: 30px; border-radius: 7px;
+  border: 1px solid rgba(0,177,64,0.4);
+  opacity: 0.13;
+  --r: -10deg;
+  animation-delay: 3s;
+}
+.hero-float-d {
+  top: 120px; left: 6%;
+  display: flex; gap: 8px;
+  --r: 0deg;
+  animation-delay: 1s;
+}
+.hero-float-d span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(0,177,64,0.08); display: block;
+}
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0)    rotate(var(--r, 0deg)); }
+  50%      { transform: translateY(-15px) rotate(var(--r, 0deg)); }
 }
 .hero-inner {
   max-width: 1200px; width: 100%; margin: 0 auto;
@@ -559,8 +605,9 @@ body {
 .hero-phone.demo-active .phone-mock-1 { cursor: pointer; }
 .hero-phone.demo-active .phone-mock-2 { cursor: default; }
 
-/* Callout animation */
+/* Callout animations */
 @keyframes fadeInLeft { from { opacity:0; transform:translateX(-15px); } to { opacity:1; transform:translateX(0); } }
+@keyframes fadeInUp { from { opacity:0; transform:translateX(-50%) translateY(10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
 
 /* ═══════════════════ SOCIAL PROOF ═══════════════════ */
 .proof-bar {
@@ -1133,7 +1180,7 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
   .hero-phone { margin-top: 2rem; min-height: 0; }
   .phone-mock-2 { display: none; }
   .phone-mock-1 { width: 290px; }
-  .hero-phone > div[style*="left:-80px"] { display: none; }
+  .hero-float { display: none !important; }
   .quotes-grid, .values-grid, .problem-grid { grid-template-columns: 1fr; }
   .how-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
   .guardian-grid, .advisor-grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -1152,7 +1199,32 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
 </style>
 </head>
 <body>
-<script>if('scrollRestoration' in history){history.scrollRestoration='manual';}</script>
+<script>
+// Always open at the very top on refresh.
+// 1) Prevent the browser from restoring a previous scroll position.
+if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+// 2) Strip any URL hash BEFORE the browser tries to jump to an anchor (#pricing, #contact, etc.).
+if (window.location.hash) {
+  try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) {}
+}
+// 3) Force an INSTANT scroll to the top, bypassing the global `scroll-behavior: smooth` on <html>.
+(function forceTop(){
+  var html = document.documentElement;
+  var prev = html.style.scrollBehavior;
+  html.style.scrollBehavior = 'auto';
+  window.scrollTo(0, 0);
+  // Restore smooth scrolling after the jump so in-page nav still animates.
+  requestAnimationFrame(function(){ html.style.scrollBehavior = prev; });
+})();
+window.addEventListener('DOMContentLoaded', function(){ window.scrollTo(0, 0); });
+window.addEventListener('load', function(){
+  var html = document.documentElement;
+  var prev = html.style.scrollBehavior;
+  html.style.scrollBehavior = 'auto';
+  window.scrollTo(0, 0);
+  requestAnimationFrame(function(){ html.style.scrollBehavior = prev; });
+});
+</script>
 
 <!-- ═══════════════════ NAV ═══════════════════ -->
 <nav class="nav" id="nav">
@@ -1171,6 +1243,10 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
 
 <!-- ═══════════════════ HERO ═══════════════════ -->
 <section class="hero">
+  <div class="hero-float hero-float-a" aria-hidden="true"></div>
+  <div class="hero-float hero-float-b" aria-hidden="true"></div>
+  <div class="hero-float hero-float-c" aria-hidden="true"></div>
+  <div class="hero-float hero-float-d" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="hero-inner">
     <div class="hero-text fi">
       <div class="hero-eyebrow"><span class="dot"></span> EAA 2025 Compliant · Early Access</div>
@@ -1238,11 +1314,14 @@ footer .small { font-size: 0.7rem; color: var(--gray-400); margin-top: 0.5rem; }
         </div>
       </div>
 
-      <div style="position:absolute;left:-80px;bottom:60px;display:flex;align-items:center;gap:8px;animation:fadeInLeft 0.8s ease 1.5s both;">
-        <div style="text-align:center;">
-          <svg width="28" height="20" viewBox="0 0 20 15" fill="none"><circle cx="6" cy="5" r="2.5" fill="#00B140"/><circle cx="14" cy="5" r="2.5" fill="#00B140"/><path d="M4 9 Q10 14 16 9" stroke="#00B140" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-          <div style="font-family:Plus Jakarta Sans,sans-serif;font-size:0.8rem;font-weight:700;color:#00B140;white-space:nowrap;">Try the agent →</div>
-        </div>
+      <div style="position:absolute;bottom:-50px;left:50%;transform:translateX(-50%);text-align:center;animation:fadeInUp 0.8s ease 1.5s both;">
+        <svg width="20" height="24" viewBox="0 0 20 24" fill="none" style="margin-bottom:4px;">
+          <path d="M10 22 Q10 8 10 6" stroke="#00B140" stroke-width="2" stroke-linecap="round"/>
+          <path d="M5 11 L10 4 L15 11" stroke="#00B140" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <br>
+        <svg width="24" height="18" viewBox="0 0 20 15" fill="none"><circle cx="6" cy="5" r="2.5" fill="#00B140"/><circle cx="14" cy="5" r="2.5" fill="#00B140"/><path d="M4 9 Q10 14 16 9" stroke="#00B140" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+        <div style="font-family:Plus Jakarta Sans,sans-serif;font-size:0.75rem;font-weight:700;color:#00B140;margin-top:2px;">Tap to try</div>
       </div>
     </div>
   </div>
@@ -1871,10 +1950,6 @@ function resetHeroDemo() {
   });
 })();
 
-// Always open the page at the top on load / refresh
-window.addEventListener('load', function(){
-  setTimeout(function(){ window.scrollTo(0, 0); }, 0);
-});
 </script>
 </body>
 </html>
